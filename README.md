@@ -32,8 +32,8 @@ IF
 JICT,f
 PRINTRES
 ```
-2. assemble it by Mvm.Assembler
-3. run generated out.bin by Mvm out.bin
+2. assemble it by `Mvm.Assembler program.ms`
+3. run generated out.bin by `Mvm out.bin`
 4. you will see output like bellow:
 ```
 4
