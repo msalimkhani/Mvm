@@ -40,3 +40,8 @@ PRINTRES
 3
 64
 ```
+# Contributing
+We welcome contributions to this project! Feel free to open pull requests with improvements, bug fixes, or additional features.
+
+# Stay Connected
+Feel free to raise any questions or suggestions through GitHub issues.
