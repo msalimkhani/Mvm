@@ -30,5 +30,6 @@ namespace Mvm
                 registerSum.value = (registerA.value + registerB.value);
             }
         }
+        
     }
 }

@@ -38,9 +38,94 @@ namespace Mvm
         {
             registerB.value = data;
         }
+        public void And(Register r1, Register r2)
+        {
+            r1.value = r1.value & r2.value;
+        }
+        public void Or(Register r1, Register r2)
+        {
+            r1.value = r1.value | r2.value;
+        }
+        public void actionAnd(Register r)
+        {
+            programCounter++;
+            var r2 = ram.ProgramMemory[programCounter];
+            switch (r2)
+            {
+                case Programs.A:
+                    And(r, registerA);
+                    break;
+                case Programs.B:
+                    And(r, registerB);
+                    break;
+                case Programs.A1:
+                    And(r, registerA1);
+                    break;
+                case Programs.A2:
+                    And(r, registerA2);
+                    break;
+                case Programs.RES:
+                    And(r, registerRes);
+                    break;
+            }
+        }
+        public void actionOr(Register r)
+        {
+            programCounter++;
+            var r2 = ram.ProgramMemory[programCounter];
+            switch (r2)
+            {
+                case Programs.A:
+                    Or(r, registerA);
+                    break;
+                case Programs.B:
+                    Or(r, registerB);
+                    break;
+                case Programs.A1:
+                    Or(r, registerA1);
+                    break;
+                case Programs.A2:
+                    Or(r, registerA2);
+                    break;
+                case Programs.RES:
+                    Or(r, registerRes);
+                    break;
+            }
+        }
+        public void actionSubR(Register r)
+        {
+            programCounter++;
+            var r2 = ram.ProgramMemory[programCounter];
+            switch (r2)
+            {
+                case Programs.A:
+                    SubR(r, registerA);
+                    break;
+                case Programs.B:
+                    SubR(r, registerB);
+                    break;
+                case Programs.A1:
+                    SubR(r, registerA1);
+                    break;
+                case Programs.A2:
+                    SubR(r, registerA2);
+                    break;
+                case Programs.RES:
+                    SubR(r, registerRes);
+                    break;
+                default:
+                    r.value -= r2;
+                    break;
+                    
+            }
+        }
+        public void SubR(Register r1, Register r2)
+        {
+            r1.value -= r2.value;
+        }
         public void If(Register r1, Register r2)
         {
-            if(r1.value == r2.value)
+            if (r1.value == r2.value)
             {
                 registerC.value = 1;
             }
@@ -109,6 +194,7 @@ namespace Mvm
                 {
                     alu.Action(false, true);
                     registerRes.value = registerSum.value;
+                    continue;
                 }
                 else if (program == Programs.JMP)
                 {
@@ -117,7 +203,7 @@ namespace Mvm
                     programCounter = data - 1;
                     continue;
                 }
-                else if(program == Programs.IF)
+                else if (program == Programs.IF)
                 {
                     If(registerA1, registerA2);
                     continue;
@@ -127,14 +213,14 @@ namespace Mvm
                     Ifn(registerA1, registerA2);
                     continue;
                 }
-                else if(program == Programs.JICT)
+                else if (program == Programs.JICT)
                 {
                     if (registerC.value == 1)
                     {
                         programCounter++;
                         var data = ram.ProgramMemory[programCounter];
-                        
                         programCounter = data - 1;
+                        continue;
                     }
                     continue;
                 }
@@ -144,20 +230,20 @@ namespace Mvm
                     {
                         programCounter++;
                         var data = ram.ProgramMemory[programCounter];
-
                         programCounter = data - 1;
+                        continue;
                     }
                     continue;
                 }
-                else if(program == Programs.MOV)
+                else if (program == Programs.MOV)
                 {
                     programCounter++;
                     var register = ram.ProgramMemory[programCounter];
-                    if(register == Programs.A1)
+                    if (register == Programs.A1)
                     {
                         programCounter++;
                         var data = ram.ProgramMemory[programCounter];
-                        if(data == Programs.A)
+                        if (data == Programs.A)
                         {
                             registerA1.value = registerA.value;
                         }
@@ -165,7 +251,7 @@ namespace Mvm
                         {
                             registerA1.value = registerA1.value;
                         }
-                        else if(data == Programs.A2)
+                        else if (data == Programs.A2)
                         {
                             registerA1.value = registerA2.value;
                         }
@@ -181,6 +267,8 @@ namespace Mvm
                         {
                             registerA1.value = data;
                         }
+
+                        continue;
                     }
                     else if (register == Programs.A2)
                     {
@@ -206,10 +294,96 @@ namespace Mvm
                         {
                             registerA2.value = data;
                         }
+
+                        continue;
                     }
-                    continue;
+                    else if (register == Programs.RES)
+                    {
+                        programCounter++;
+                        var data = ram.ProgramMemory[programCounter];
+                        if (data == Programs.A)
+                        {
+                            registerRes.value = registerA.value;
+                        }
+                        else if (data == Programs.A1)
+                        {
+                            registerRes.value = registerA1.value;
+                        }
+                        else if (data == Programs.B)
+                        {
+                            registerRes.value = registerB.value;
+                        }
+                        else if (data == Programs.A2)
+                        {
+                            registerRes.value = registerA2.value;
+                        }
+                        else if (data == Programs.C)
+                        {
+                            registerRes.value = registerC.value;
+                        }
+                        else
+                        {
+                            registerRes.value = data;
+                        }
+
+                        continue;
+                    }
+                    else if (register == Programs.A)
+                    {
+                        programCounter++;
+                        var data = ram.ProgramMemory[programCounter];
+                        if (data == Programs.A2)
+                        {
+                            registerA.value = registerA2.value;
+                        }
+                        else if (data == Programs.A1)
+                        {
+                            registerA.value = registerA1.value;
+                        }
+                        else if (data == Programs.B)
+                        {
+                            registerA.value = registerB.value;
+                        }
+                        else if (data == Programs.RES)
+                        {
+                            registerA.value = registerRes.value;
+                        }
+                        else
+                        {
+                            registerA.value = data;
+                        }
+
+                        continue;
+                    }
+                    else if (register == Programs.B)
+                    {
+                        programCounter++;
+                        var data = ram.ProgramMemory[programCounter];
+                        if (data == Programs.A2)
+                        {
+                            registerB.value = registerA2.value;
+                        }
+                        else if (data == Programs.A1)
+                        {
+                            registerB.value = registerA1.value;
+                        }
+                        else if (data == Programs.A)
+                        {
+                            registerB.value = registerA.value;
+                        }
+                        else if (data == Programs.RES)
+                        {
+                            registerB.value = registerRes.value;
+                        }
+                        else
+                        {
+                            registerB.value = data;
+                        }
+
+                        continue;
+                    }
                 }
-                else if(program == Programs.PROMPT)
+                else if (program == Programs.PROMPT)
                 {
                     programCounter++;
                     var register = ram.ProgramMemory[programCounter];
@@ -225,13 +399,13 @@ namespace Mvm
                         read = Convert.ToInt32(Console.ReadLine());
                         registerA2.value = read;
                     }
-                    else if(register == Programs.A)
+                    else if (register == Programs.A)
                     {
                         int read;
                         read = Convert.ToInt32(Console.ReadLine());
                         registerA.value = read;
                     }
-                    else if(register == Programs.B)
+                    else if (register == Programs.B)
                     {
                         int read;
                         read = Convert.ToInt32(Console.ReadLine());
@@ -239,11 +413,83 @@ namespace Mvm
                     }
                     continue;
                 }
-                else if(program ==Programs.NOP)
+                else if (program == Programs.NOP)
                 {
                     continue;
                 }
-                else if(program == Programs.HALT)
+                else if (program == Programs.AND)
+                {
+                    programCounter++;
+                    var r1 = ram.ProgramMemory[programCounter];
+                    switch (r1)
+                    {
+                        case Programs.A:
+                            actionAnd(registerA);
+                            break;
+                        case Programs.A2:
+                            actionAnd(registerA2);
+                            break;
+                        case Programs.B:
+                            actionAnd(registerB);
+                            break;
+                        case Programs.A1:
+                            actionAnd(registerA1);
+                            break;
+                        case Programs.RES:
+                            actionAnd(registerRes);
+                            break;
+                    }
+                    continue;
+                }
+                else if (program == Programs.OR)
+                {
+                    programCounter++;
+                    var r1 = ram.ProgramMemory[programCounter];
+                    switch (r1)
+                    {
+                        case Programs.A:
+                            actionOr(registerA);
+                            break;
+                        case Programs.A2:
+                            actionOr(registerA2);
+                            break;
+                        case Programs.B:
+                            actionOr(registerB);
+                            break;
+                        case Programs.A1:
+                            actionOr(registerA1);
+                            break;
+                        case Programs.RES:
+                            actionOr(registerRes);
+                            break;
+                    }
+                    continue;
+                }
+                else if(program == Programs.SUBR)
+                {
+                    programCounter++;
+                    var r1 = ram.ProgramMemory[programCounter];
+                    switch (r1)
+                    {
+                        case Programs.A:
+                            actionSubR(registerA);
+                            break;
+                        case Programs.A2:
+                            actionSubR(registerA2);
+                            break;
+                        case Programs.B:
+                            actionSubR(registerB);
+                            break;
+                        case Programs.A1:
+                            actionSubR(registerA1);
+                            break;
+                        case Programs.RES:
+                            actionSubR(registerRes);
+                            break;
+                    }
+                    continue;
+                }
+                else if (program == Programs.HALT)
                 {
                     break;
                 }

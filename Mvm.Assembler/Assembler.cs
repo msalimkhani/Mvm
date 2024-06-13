@@ -36,13 +36,26 @@ namespace Mvm.Assembler
             new Token(100, "A"),
             new Token(99, "B"),
             new Token(98, "RES"),
-            new Token(50, "NOP")
+            new Token(50, "NOP"),
+            new Token(77, "C"),
+            new Token(0, "RET"),
+            new Token(78, "SUBR")
     };
         private static List<Token> labels = new List<Token>();
+        private static List<int> argCount = new List<int>();
         private string contents;
         public Assembler(string contents)
         {
             this.contents = contents;
+        }
+        private int SumTo(List<int> ints,int offset)
+        {
+            int sum = 0;
+            for (int i = 0; i < offset; i++)
+            {
+                sum += ints[i];
+            }
+            return sum;
         }
         public int[] Assemble()
         {
@@ -54,16 +67,24 @@ namespace Mvm.Assembler
             int pc = -1;
             for (int i = 0; i < lines.Length; i++)
             {
-                //pc = ;
                 var line = lines[i];
                 var splitted = line.Split(',');
-                for (int j = 0; j < splitted.Length; j++)
-                {
-                    pc++;
-                }
+                argCount.Add(splitted.Length-1);
+            }
+            foreach (var item in argCount)
+            {
+                Console.Write(item + " ");
+            }
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                var splitted = line.Split(',');
                 var command = splitted[0];
                 if (command.Contains(':'))
                 {
+                    pc = i;
+                    Console.WriteLine(argCount.Sum());
+                    pc += SumTo(argCount, i);
                     var labelwithcommand = command.Split(':');
                     labels.Add(new Token(pc, labelwithcommand[0]));
                     //Console.WriteLine("lbl found");
@@ -134,6 +155,10 @@ namespace Mvm.Assembler
                 {
                     result.AddRange(args);
                 }
+            }
+            else
+            {
+                Console.WriteLine("Instruction " + command + "Not Found");
             }
         }
     }

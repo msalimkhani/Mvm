@@ -35,5 +35,7 @@ namespace Mvm
         public const int B = 99;
         public const int RES = 98;
         public const int NOP = 50;
+        public const int C = 77;
+        public const int SUBR = 78;
     }
 }
