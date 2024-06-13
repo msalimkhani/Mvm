@@ -17,6 +17,9 @@ PROMPT(READ AN INT FROM USER INPUT AND STORE IT TO CUSTOM REGISTER),
 MOV   (MOVE CUSTOM REGISTER TO ANOTHER ONE),
 PRINTRES (PRINT REGISTER RES VAL TO STDOUT)
 ```
+
+# Give a Star🌟:
+if you like this, please give a Star for the project.
 # Sample Usage:
 1. first write an program and save.
 sample program(program for power A by A1):
