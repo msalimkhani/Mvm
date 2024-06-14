@@ -39,7 +39,8 @@ namespace Mvm.Assembler
             new Token(50, "NOP"),
             new Token(77, "C"),
             new Token(0, "RET"),
-            new Token(78, "SUBR")
+            new Token(78, "SUBR"),
+            new Token(79, "INC")
     };
         private static List<Token> labels = new List<Token>();
         private static List<int> argCount = new List<int>();

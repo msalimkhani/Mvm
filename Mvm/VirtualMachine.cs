@@ -116,7 +116,7 @@ namespace Mvm
                 default:
                     r.value -= r2;
                     break;
-                    
+
             }
         }
         public void SubR(Register r1, Register r2)
@@ -465,7 +465,7 @@ namespace Mvm
                     }
                     continue;
                 }
-                else if(program == Programs.SUBR)
+                else if (program == Programs.SUBR)
                 {
                     programCounter++;
                     var r1 = ram.ProgramMemory[programCounter];
@@ -493,7 +493,37 @@ namespace Mvm
                 {
                     break;
                 }
+                else if (program == Programs.INC)
+                {
+                    programCounter++;
+                    var register = ram.ProgramMemory[programCounter];
+                    switch (register)
+                    {
+                        case Programs.A:
+                            actionINC(registerA);
+                            break;
+                        case Programs.A2:
+                            actionINC(registerA2);
+                            break;
+                        case Programs.A1:
+                            actionINC(registerA1);
+                            break;
+                        case Programs.RES:
+                            actionINC(registerRes);
+                            break;
+                        case Programs.B:
+                            actionINC(registerB);
+                            break;
+                        default:
+                            throw new Exception("Unhandled Code.");
+                    }
+                }
             }
+        }
+
+        private void actionINC(Register r)
+        {
+            r.value += 1;
         }
     }
 }
