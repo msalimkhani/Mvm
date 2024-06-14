@@ -17,12 +17,19 @@ namespace Mvm.Assembler
         }
         public string readToEndString()
         {
-            using (FileStream stream = File.OpenRead(inFile))
+            try
             {
-                using (StreamReader reader = new StreamReader(stream))
+                using (FileStream stream = File.OpenRead(inFile))
                 {
-                    return reader.ReadToEnd();
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         public byte[] readToEndBytes()
