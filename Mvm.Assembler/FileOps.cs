@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Mvm.Assembler
 {
@@ -37,14 +38,22 @@ namespace Mvm.Assembler
             var bytes = File.ReadAllBytes(inFile);
             return bytes;
         }
-        public void writeData(int[] data)
+        public void writeInstructions(int[] ints)
         {
-            using (FileStream stream = File.OpenWrite(outFile))
+            try
             {
-                foreach (var item in data)
+                using (FileStream stream = File.OpenWrite(outFile))
                 {
-                    stream.WriteByte((byte)item);
+                    foreach (var item in ints)
+                    {
+                        stream.WriteByte((byte)item);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

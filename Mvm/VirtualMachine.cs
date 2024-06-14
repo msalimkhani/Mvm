@@ -119,9 +119,40 @@ namespace Mvm
 
             }
         }
+        public void actionAddR(Register r)
+        {
+            programCounter++;
+            var r2 = ram.ProgramMemory[programCounter];
+            switch (r2)
+            {
+                case Programs.A:
+                    AddR(r, registerA);
+                    break;
+                case Programs.B:
+                    AddR(r, registerB);
+                    break;
+                case Programs.A1:
+                    AddR(r, registerA1);
+                    break;
+                case Programs.A2:
+                    AddR(r, registerA2);
+                    break;
+                case Programs.RES:
+                    AddR(r, registerRes);
+                    break;
+                default:
+                    r.value += r2;
+                    break;
+
+            }
+        }
         public void SubR(Register r1, Register r2)
         {
             r1.value -= r2.value;
+        }
+        public void AddR(Register r1, Register r2)
+        {
+            r1.value += r2.value;
         }
         public void If(Register r1, Register r2)
         {
@@ -517,6 +548,30 @@ namespace Mvm
                         default:
                             throw new Exception("Unhandled Code.");
                     }
+                }
+                else if (program == Programs.ADDR)
+                {
+                    programCounter++;
+                    var r1 = ram.ProgramMemory[programCounter];
+                    switch (r1)
+                    {
+                        case Programs.A:
+                            actionAddR(registerA);
+                            break;
+                        case Programs.A2:
+                            actionAddR(registerA2);
+                            break;
+                        case Programs.B:
+                            actionAddR(registerB);
+                            break;
+                        case Programs.A1:
+                            actionAddR(registerA1);
+                            break;
+                        case Programs.RES:
+                            actionAddR(registerRes);
+                            break;
+                    }
+                    continue;
                 }
             }
         }

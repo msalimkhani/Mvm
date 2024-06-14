@@ -38,5 +38,6 @@ namespace Mvm
         public const int C = 77;
         public const int SUBR = 78;
         public const int INC = 79;
+        public const int ADDR = 80;
     }
 }

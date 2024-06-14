@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Mvm.Assembler
 {
@@ -40,7 +40,8 @@ namespace Mvm.Assembler
             new Token(77, "C"),
             new Token(0, "RET"),
             new Token(78, "SUBR"),
-            new Token(79, "INC")
+            new Token(79, "INC"),
+            new Token(80, "ADDR")
     };
         private static List<Token> labels = new List<Token>();
         private static List<int> argCount = new List<int>();
@@ -49,7 +50,7 @@ namespace Mvm.Assembler
         {
             this.contents = contents;
         }
-        private int SumTo(List<int> ints,int offset)
+        private int SumTo(List<int> ints, int offset)
         {
             int sum = 0;
             for (int i = 0; i < offset; i++)
@@ -60,21 +61,20 @@ namespace Mvm.Assembler
         }
         public int[] Assemble()
         {
+            
+            //string newContent = assembleConstants();
+            //Console.WriteLine(newContent);
             string[] lines = contents.Split("\r\n");
             List<int> result = new List<int>();
 
             if (lines.Length == 0)
-                return Array.Empty<int>();
+                throw new Exception("lines null");
             int pc = -1;
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
                 var splitted = line.Split(',');
-                argCount.Add(splitted.Length-1);
-            }
-            foreach (var item in argCount)
-            {
-                Console.Write(item + " ");
+                argCount.Add(splitted.Length - 1);
             }
             for (int i = 0; i < lines.Length; i++)
             {
@@ -84,7 +84,6 @@ namespace Mvm.Assembler
                 if (command.Contains(':'))
                 {
                     pc = i;
-                    Console.WriteLine(argCount.Sum());
                     pc += SumTo(argCount, i);
                     var labelwithcommand = command.Split(':');
                     labels.Add(new Token(pc, labelwithcommand[0]));
@@ -131,14 +130,12 @@ namespace Mvm.Assembler
                     var arg = splitted[i + 1];
                     var tokenArg = tokens.Where(t => t.Mnemonic == arg).FirstOrDefault();
                     var lbl = labels.Where(l => l.Mnemonic.Contains(arg)).FirstOrDefault();
-                    if (lbl != null) Console.WriteLine(lbl.Mnemonic + ":" + lbl.ByteCode);
                     if (tokenArg != null)
                     {
                         args[i] = tokenArg.ByteCode;
                     }
                     else if (lbl != null)
                     {
-                        Console.WriteLine("lbl actioned");
                         args[i] = lbl.ByteCode;
                         continue;
                     }
