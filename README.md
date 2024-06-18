@@ -34,7 +34,7 @@ f:MUL
 MOV,A,RES
 SUBR,A1,1
 IF
-JICT,f
+JICF,f
 PRINTRES
 ```
 2. assemble it by `Mvm.Assembler program.ms`
